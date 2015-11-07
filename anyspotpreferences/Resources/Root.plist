@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>items</key>
+	<array>
+		<dict>
+                <key>cell</key>
+                <string>PSLinkCell</string>
+                <key>label</key>
+                <string>Activator Methods</string>
+                <key>isController</key>
+                <true/>
+                <key>bundle</key>
+                <string>LibActivator</string>
+                <key>activatorListener</key>
+                <string>org.thebigboss.anyspot9</string>
+                <key>icon</key>
+                <string>Recent.png</string>
+		</dict>
+	</array>
+	<key>title</key>
+	<string>AnySpot</string>
+</dict>
+</plist>

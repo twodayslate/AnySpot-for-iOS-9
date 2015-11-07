@@ -1,0 +1,202 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXFileReference section */
+		118DFDFC1BE2E00400816B70 /* AnySpotHeaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnySpotHeaders.h; sourceTree = "<group>"; };
+		118DFDFD1BE2E00400816B70 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		118DFDFE1BE2E00400816B70 /* Tweak.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.objc.preprocessed; fileEncoding = 4; path = Tweak.xm; sourceTree = "<group>"; };
+		118E5F071BE2FE1B00A985F3 /* Testing.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.objc.preprocessed; fileEncoding = 4; path = Testing.xm; sourceTree = "<group>"; };
+		118E5F211BED85AD00A985F3 /* anyspotpreferences */ = {isa = PBXFileReference; lastKnownFileType = folder; path = anyspotpreferences; sourceTree = "<group>"; };
+		11F25C7C1BE2E2EA00E08B3D /* control */ = {isa = PBXFileReference; lastKnownFileType = text; path = control; sourceTree = "<group>"; };
+		11F25C7D1BE2E2EA00E08B3D /* anyspot9.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = anyspot9.plist; sourceTree = "<group>"; };
+		11F25C7E1BE2E39900E08B3D /* AnySpotActivator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AnySpotActivator.h; sourceTree = "<group>"; };
+		11F25C7F1BE2E3B100E08B3D /* LAListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LAListener.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		116220331BE2DF1900700CD5 = {
+			isa = PBXGroup;
+			children = (
+				118E5F211BED85AD00A985F3 /* anyspotpreferences */,
+				118E5F071BE2FE1B00A985F3 /* Testing.xm */,
+				11F25C7E1BE2E39900E08B3D /* AnySpotActivator.h */,
+				118DFDFC1BE2E00400816B70 /* AnySpotHeaders.h */,
+				118DFDFD1BE2E00400816B70 /* Makefile */,
+				11F25C7C1BE2E2EA00E08B3D /* control */,
+				11F25C7D1BE2E2EA00E08B3D /* anyspot9.plist */,
+				118DFDFE1BE2E00400816B70 /* Tweak.xm */,
+				11F25C7F1BE2E3B100E08B3D /* LAListener.h */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXLegacyTarget section */
+		1162203A1BE2DF9A00700CD5 /* theos */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "$(ACTION)";
+			buildConfigurationList = 1162203B1BE2DF9A00700CD5 /* Build configuration list for PBXLegacyTarget "theos" */;
+			buildPhases = (
+			);
+			buildToolPath = /usr/bin/make;
+			buildWorkingDirectory = "";
+			dependencies = (
+			);
+			name = theos;
+			passBuildSettingsInEnvironment = 0;
+			productName = Theos;
+		};
+/* End PBXLegacyTarget section */
+
+/* Begin PBXProject section */
+		116220341BE2DF1900700CD5 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0710;
+				TargetAttributes = {
+					1162203A1BE2DF9A00700CD5 = {
+						CreatedOnToolsVersion = 7.1;
+					};
+				};
+			};
+			buildConfigurationList = 116220371BE2DF1900700CD5 /* Build configuration list for PBXProject "AnySpot9" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 116220331BE2DF1900700CD5;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1162203A1BE2DF9A00700CD5 /* theos */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin XCBuildConfiguration section */
+		116220381BE2DF1900700CD5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		116220391BE2DF1900700CD5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		1162203C1BE2DF9A00700CD5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUGGING_SYMBOLS = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		1162203D1BE2DF9A00700CD5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "FORRELEASE=1";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		116220371BE2DF1900700CD5 /* Build configuration list for PBXProject "AnySpot9" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				116220381BE2DF1900700CD5 /* Debug */,
+				116220391BE2DF1900700CD5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1162203B1BE2DF9A00700CD5 /* Build configuration list for PBXLegacyTarget "theos" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1162203C1BE2DF9A00700CD5 /* Debug */,
+				1162203D1BE2DF9A00700CD5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 116220341BE2DF1900700CD5 /* Project object */;
+}

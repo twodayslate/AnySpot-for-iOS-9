@@ -1,0 +1,10 @@
+Package: org.thebigboss.anyspot9
+Name: AnySpot9
+Depends: mobilesubstrate
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: Launch Spotlight from anywhere!
+Maintainer: twodayslate <zac@gorak.us>
+Author: twodayslate <zac@gorak.us>
+Section: Tweaks
+Icon: file:///Library/PreferenceBundles/anyspotpreferences.bundle/icon.png
