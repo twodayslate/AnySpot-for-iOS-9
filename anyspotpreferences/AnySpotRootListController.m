@@ -4,14 +4,20 @@
 
 - (NSArray *)specifiers {
 	if (!_specifiers) {
+        // Grab the Root.plist file from Resources/Root.plist and present that stuff
 		_specifiers = [[self loadSpecifiersFromPlistName:@"Root" target:self] retain];
 	}
 
 	return _specifiers;
 }
 
-
+/* 
+ * @param tableView
+ * @param indexPath
+ */
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    // As of now just using this method to control and check if activator is installed
+    // and display an alert if it is not
 	if(indexPath.section == 0 && indexPath.row == 0 && !NSClassFromString(@"LASettingsViewController")) {
 		HBLogInfo(@"Activator not installed. Class not found!");
 

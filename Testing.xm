@@ -14,13 +14,14 @@
     // This makes it so it always shows more Siri suggestions:
     //      Nearby, and News
     //  However, you lose the up swipe to dismiss
-    //return NO;
+    %log;
     return %orig;
 }
 %end
 
 %hook SBSearchViewController
 - (void)dismissAnimated:(_Bool)arg1 completionBlock:(id)arg2 {
+    // Not sure if this is worth hooking and adding to the completion block
     %log;
     %orig;
 }
@@ -94,7 +95,6 @@
 
 %end
 
-
 %hook SBMainDisplaySceneManager
 - (_Bool)_isActivatingPinnedBreadcrumbApp:(id)arg1 withTransitionContext:(id)arg2 {
     %log;
@@ -114,11 +114,6 @@
 }
 - (id)_breadcrumbBundleIdForApplication:(id)arg1 withTransitionContext:(id)arg2 {
     %log;
-    return %orig;
-}
-- (_Bool)_shouldBreadcrumbApplication:(id)arg1 withTransitionContext:(id)arg2 {
-    %log;
-    // this should return false if launching from inside an application
     return %orig;
 }
 - (void)_presentSpotlightFromEdge:(unsigned long long)arg1 fromBreadcrumb:(_Bool)arg2 {

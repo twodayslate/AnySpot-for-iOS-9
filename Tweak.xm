@@ -249,11 +249,7 @@ static void cleanup() {
 }
 
 - (NSString *)activator:(LAActivator *)activator requiresLocalizedDescriptionForListenerName:(NSString *)listenerName {
-	return @"Activate AnySpot.";
-}
-
-- (id)activator:(LAActivator *)activator requiresInfoDictionaryValueOfKey:(NSString *)key forListenerWithName:(NSString *)listenerName {
-	return [NSNumber numberWithBool:YES]; // HAX so it can send raw events. <3 rpetrich
+	return @"Toggle AnySpot.";
 }
 
 - (NSArray *)activator:(LAActivator *)activator requiresCompatibleEventModesForListenerWithName:(NSString *)listenerName {

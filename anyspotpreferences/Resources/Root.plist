@@ -5,18 +5,18 @@
 	<key>items</key>
 	<array>
 		<dict>
-                <key>cell</key>
-                <string>PSLinkCell</string>
-                <key>label</key>
-                <string>Activator Methods</string>
-                <key>isController</key>
-                <true/>
-                <key>bundle</key>
-                <string>LibActivator</string>
-                <key>activatorListener</key>
-                <string>org.thebigboss.anyspot9</string>
-                <key>icon</key>
-                <string>Recent.png</string>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>label</key>
+			<string>Activator Methods</string>
+			<key>isController</key>
+			<true/>
+			<key>bundle</key>
+			<string>LibActivator</string>
+			<key>activatorListener</key>
+			<string>org.thebigboss.anyspot9</string>
+			<key>icon</key>
+			<string>/Library/Application Support/AnySpot/assets/Recent2.png</string>
 		</dict>
 	</array>
 	<key>title</key>
