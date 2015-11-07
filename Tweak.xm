@@ -20,6 +20,7 @@ static void cleanup() {
         
         if(latestSnapshotView) {
             HBLogDebug(@"remvoing from superview");
+            // Not sure if all this is necessary. Probably not. 
             [latestSnapshotView removeFromSuperview];
             [latestSnapshotView release];
             latestSnapshotView = nil;
