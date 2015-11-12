@@ -36,6 +36,7 @@ static void cleanup() {
         }
     });
     didLaunchfrominsideapplication = NO;
+    latestBundleID = @"";
 }
 
 %hook SPUISearchViewController
