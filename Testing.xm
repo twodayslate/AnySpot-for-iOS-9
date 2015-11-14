@@ -37,10 +37,6 @@
     %orig;
 }
 
-- (void)openURL:(id)arg1 {
-    %log;
-    %orig;
-}
 - (void)didSelectActionItemForResult:(id)arg1 {
     %log;
     %orig;

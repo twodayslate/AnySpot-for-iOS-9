@@ -18,6 +18,75 @@
 			<key>icon</key>
 			<string>/Library/Application Support/AnySpot/assets/Recent2.png</string>
 		</dict>
+        
+        <dict>
+            <key>cell</key>
+            <string>PSGroupCell</string>
+        </dict>
+        <dict>
+            <key>cell</key>
+            <string>PSLinkCell</string>
+            <key>isController</key>
+            <string>1</string>
+            <key>label</key>
+            <string>Advanced Options</string>
+            <key>icon</key>
+            <string>/Library/Application Support/AnySpot/assets/services.png</string>
+            <key>detail</key>
+            <string>AnySpotAdvancedListController</string> <!-- AboutController brings up teh standard about page -->
+        </dict>
+        
+        <dict>
+            <key>cell</key>
+            <string>PSGroupCell</string>
+        </dict>
+        <dict>
+            <key>cell</key>			<string>PSButtonCell</string>
+            <key>label</key>		<string>Report an issue</string>
+            <key>icon</key> 	    <string>/Library/Application Support/AnySpot/assets/github.png</string>
+            <key>action</key>  		<string>github</string>
+        </dict>
+        
+        <dict>
+            <key>cell</key>
+            <string>PSGroupCell</string>
+            <key>label</key>
+            <string>The Author</string>
+        </dict>
+        <dict>
+            <key>cell</key>			<string>PSButtonCell</string>
+            <key>label</key>		<string>@twodayslate</string>
+            <key>icon</key> 	    <string>/Library/Application Support/AnySpot/assets/twitter.png</string>
+            <key>action</key>  		<string>twitter</string>
+        </dict>
+        <dict>
+            <key>cell</key>			<string>PSButtonCell</string>
+            <key>label</key>		<string>Other tweaks</string>
+            <key>icon</key> 	    <string>/Library/Application Support/AnySpot/assets/link.png</string>
+            <key>action</key>  		<string>user</string>
+        </dict>
+        
+        <dict>
+            <key>cell</key>
+            <string>PSGroupCell</string>
+            <key>label</key>
+            <string>Donate</string>
+        </dict>
+        <dict>
+            <key>cell</key>			<string>PSButtonCell</string>
+            <key>label</key>		<string>Bitcoin</string>
+            <key>icon</key> 	    <string>/Library/Application Support/AnySpot/assets/bitcoin.png</string>
+            <key>action</key>  		<string>bitcoin</string>
+        </dict>
+        <dict>
+            <key>cell</key>			<string>PSButtonCell</string>
+            <key>label</key>		<string>Paypal</string>
+            <key>icon</key> 	    <string>/Library/Application Support/AnySpot/assets/paypal.png</string>
+            <key>action</key>  		<string>paypal</string>
+        </dict>
+    
+        
+       
 	</array>
 	<key>title</key>
 	<string>AnySpot</string>

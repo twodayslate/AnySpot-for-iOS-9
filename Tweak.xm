@@ -7,6 +7,8 @@ static NSString *latestBundleID = nil;
 static UIImageView *latestSnapshotView = nil;
 static BOOL didLaunchfrominsideapplication = NO;
 
+static NSMutableDictionary *settings = nil;
+
 /* 
  * Does any necessary cleanup of Spotlight if launched from an application
  * Running in the main queue to avoid exceptions for doing graphics stuff
@@ -33,6 +35,12 @@ static void cleanup() {
                 HBLogDebug(@"Darn thing was hiding!");
                 [view removeFromSuperview];
             }
+        }
+        
+        BOOL extraSmooth = [settings objectForKey:@"extraSmooth"] ? [[settings objectForKey:@"extraSmooth"] boolValue] : NO;
+        HBLogDebug(@"Want extra smoothness? = %f", (float) extraSmooth);
+        if(extraSmooth) {
+            [[outerview.superview viewWithTag:666] removeFromSuperview];
         }
     });
     didLaunchfrominsideapplication = NO;
@@ -96,6 +104,21 @@ static void cleanup() {
         }
     }
 }
+
+/*
+ * Need to cleanup after opening a URL (Search web)
+ * _displayLaunched: is also called for a search
+ * @param arg1 the url that will be launched
+ */
+- (void)openURL:(id)arg1 {
+    %log;
+    if(didLaunchfrominsideapplication) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [(SBSearchViewController *)[%c(SBSearchViewController) sharedInstance] dismiss];
+        });
+    }
+    %orig;
+}
 %end
 
 %hook SBMainDisplaySceneManager
@@ -111,8 +134,8 @@ static void cleanup() {
     // on SpringBoard's homescreen if launched from inside an application
     // What should actually happen is the breadcrumb should take you back to the application
     if(didLaunchfrominsideapplication) {
+        cleanup();
         return NO;
-        didLaunchfrominsideapplication = NO;
     }
     return %orig;
 }
@@ -215,6 +238,7 @@ static void cleanup() {
 		    FBWindowContextHostManager *contextHost = [appScene contextHostManager];
             UIImage *snapshot = [contextHost snapshotUIImageForFrame:[[UIScreen mainScreen] applicationFrame] excludingContexts:nil opaque:NO outTransform:nil];
             latestSnapshotView = [[UIImageView alloc] initWithImage:snapshot];
+            latestSnapshotView.tag = 666;
             
 		    latestHostWindow = [[contextHost valueForKey:@"_hostView"] window];
             
@@ -223,6 +247,12 @@ static void cleanup() {
             //  removing it more difficult.
             HBLogDebug(@"Adding UIImage to %@", outerview);
             [outerview insertSubview:latestSnapshotView atIndex:0];
+            
+            BOOL extraSmooth = [settings objectForKey:@"extraSmooth"] ? [[settings objectForKey:@"extraSmooth"] boolValue] : NO;
+            HBLogDebug(@"Want extra smoothness? = %f", (float) extraSmooth);
+            if(extraSmooth) {
+                [outerview.superview insertSubview:latestSnapshotView belowSubview:outerview];
+            }
             
 		    latestHostWindow.windowLevel = -3.0; // put it under the homescreen which is -2.0
 		    [(SBUIController *)[%c(SBUIController) sharedInstance] restoreContentAndUnscatterIconsAnimated:NO];
@@ -258,8 +288,18 @@ static void cleanup() {
 }
 @end
 
+static void getSettings() {
+    
+    settings = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/org.thebigboss.anyspot9.plist"];
+    //logging = [settings objectForKey:@"logging_enabled"] ? [[settings objectForKey:@"logging_enabled"] boolValue] : NO;
+    HBLogDebug(@"Settings changed or initiated %@", settings);
+}
+
 %ctor {
 	dlopen("/usr/lib/libactivator.dylib", RTLD_LAZY);
     static AnySpotActivator *listener = [[AnySpotActivator alloc] init];
     [(LAActivator *)[%c(LAActivator) sharedInstance] registerListener:listener forName:@"org.thebigboss.anyspot9"];
+    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)getSettings, CFSTR("org.thebigboss.anyspot9/settingschanged"), NULL, CFNotificationSuspensionBehaviorCoalesce);
+    getSettings();
+
 }

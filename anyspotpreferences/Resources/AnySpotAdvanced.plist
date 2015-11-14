@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>items</key>
+	<array>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Smoothness</string>
+			<key>footerText</key>
+            <string>If enabled, extra steps will be added to create a smoother animation when launching and dismissing Spotlight inside an application. However, this will slow down the dismissal/cleanup process. See GitHub issue #4 for more details.</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>org.thebigboss.anyspot9</string>
+			<key>key</key>
+			<string>extraSmooth</string>
+			<key>label</key>
+			<string>Enabled</string>
+			<key>PostNotification</key>
+			<string>org.thebigboss.anyspot9/settingschanged</string>
+		</dict>
+    </array>
+	<key>title</key>
+	<string>Advanced</string>
+</dict>
+</plist>

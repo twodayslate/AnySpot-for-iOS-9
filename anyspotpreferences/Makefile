@@ -4,7 +4,7 @@ ARCHS = armv7 armv7s arm64
 include $(THEOS)/makefiles/common.mk
 
 BUNDLE_NAME = AnySpotPreferences
-AnySpotPreferences_FILES = AnySpotRootListController.m
+AnySpotPreferences_FILES = AnySpotRootListController.m AnySpotAdvancedListController.m
 AnySpotPreferences_INSTALL_PATH = /Library/PreferenceBundles
 AnySpotPreferences_FRAMEWORKS = UIKit
 AnySpotPreferences_PRIVATE_FRAMEWORKS = Preferences
