@@ -246,12 +246,13 @@ static void cleanup() {
             // I would love to insert the image in outerview's superview but this caused
             //  removing it more difficult.
             HBLogDebug(@"Adding UIImage to %@", outerview);
-            [outerview insertSubview:latestSnapshotView atIndex:0];
             
             BOOL extraSmooth = [settings objectForKey:@"extraSmooth"] ? [[settings objectForKey:@"extraSmooth"] boolValue] : NO;
-            HBLogDebug(@"Want extra smoothness? = %f", (float) extraSmooth);
             if(extraSmooth) {
+                HBLogDebug(@"Going for some extra smoothness");
                 [outerview.superview insertSubview:latestSnapshotView belowSubview:outerview];
+            } else {
+                [outerview insertSubview:latestSnapshotView atIndex:0];
             }
             
 		    latestHostWindow.windowLevel = -3.0; // put it under the homescreen which is -2.0
