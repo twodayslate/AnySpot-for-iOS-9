@@ -1,10 +1,13 @@
 #import <UIKit/UIKit.h>
 #import "AnySpotActivator.h"
 #import "AnySpotHeaders.h"
+#import "AnySpotSnapshotView.h"
+#import "AnySpotController.h"
 
 static UIWindow *latestHostWindow = nil;
 static NSString *latestBundleID = nil;
-static UIImageView *latestSnapshotView = nil;
+static AnySpotSnapshotView *latestSnapshotView = nil;
+static AnySpotSnapshotView *superSmoothLatestSnapshotView = nil;
 static BOOL didLaunchfrominsideapplication = NO;
 
 static NSMutableDictionary *settings = nil;
@@ -28,21 +31,35 @@ static void cleanup() {
             latestSnapshotView = nil;
         }
         
-        // For some reason the above doesn't want to work all the time so I have to do this
-        UIView *outerview = ((SBSearchViewController *)[%c(SBSearchViewController) sharedInstance]).view;
-        for(UIView *view in outerview.subviews) {
-            if([view isKindOfClass:[UIImageView class]]) {
-                HBLogDebug(@"Darn thing was hiding!");
-                [view removeFromSuperview];
-            }
+        if(superSmoothLatestSnapshotView) {
+            HBLogDebug(@"remvoing smoothness from superview");
+            // Not sure if all this is necessary. Probably not.
+            [superSmoothLatestSnapshotView removeFromSuperview];
+            [superSmoothLatestSnapshotView release];
+            superSmoothLatestSnapshotView = nil;
         }
         
+        UIView *outerview = ((SBSearchViewController *)[%c(SBSearchViewController) sharedInstance]).view;
+        
+        // For some reason the above doesn't want to work all the time so I have to do this
+        // Extra check for a snapshot view under the search view
+//        for(UIView *view in outerview.subviews) {
+//            if([view isKindOfClass:[AnySpotSnapshotView class]]) {
+//                HBLogDebug(@"Darn thing was hiding!");
+//                [view removeFromSuperview];
+//            }
+//        }
+        // Which is faster, above or this?
+        [[outerview viewWithTag:667] removeFromSuperview];
+        
         BOOL extraSmooth = [settings objectForKey:@"extraSmooth"] ? [[settings objectForKey:@"extraSmooth"] boolValue] : NO;
-        HBLogDebug(@"Want extra smoothness? = %f", (float) extraSmooth);
+        // Extra check for a snapshot view - but no idea where it is
         if(extraSmooth) {
-            [[outerview.superview viewWithTag:666] removeFromSuperview];
+            [[outerview.superview viewWithTag:667] removeFromSuperview];
+            [[outerview.superview.superview viewWithTag:667] removeFromSuperview];
         }
     });
+    
     didLaunchfrominsideapplication = NO;
     latestBundleID = @"";
 }
@@ -196,12 +213,13 @@ static void cleanup() {
             SBApplication *frontMostApplication = [(SpringBoard *)[%c(SpringBoard) sharedApplication] _accessibilityFrontMostApplication];
             latestBundleID =[frontMostApplication bundleIdentifier];
             HBLogDebug(@"AnySpot9: frontMostApplication = %@", frontMostApplication);
-            // Check if in application
+            // Check if in application, need the new orientation screenshot
             if(frontMostApplication != nil) {
                 FBScene *appScene = [frontMostApplication mainScene];
                 FBWindowContextHostManager *contextHost = [appScene contextHostManager];
                 UIImage *snapshot = [contextHost snapshotUIImageForFrame:[[UIScreen mainScreen] applicationFrame] excludingContexts:nil opaque:NO outTransform:nil];
-                latestSnapshotView = [[UIImageView alloc] initWithImage:snapshot];
+                latestSnapshotView = [[AnySpotSnapshotView alloc] initWithImage:snapshot];
+                superSmoothLatestSnapshotView = [[AnySpotSnapshotView alloc] initWithImage:snapshot];
             }
         }
     }
@@ -209,70 +227,111 @@ static void cleanup() {
 %end
 
 
-@implementation AnySpotActivator
-- (void)activator:(id)activator receiveEvent:(LAEvent *)event {
-	HBLogDebug(@"AnySpot9: event = %@", event);
+%hook SBNotificationCenterController
+/* 
+ * Hooking this message if they want to replace the notification center with Spotlight
+ * @param arg1 location that the touch for launching Notification center began
+ * @param arg2 a block of some sort
+ */
+- (void)beginPresentationWithTouchLocation:(id)arg1 presentationBegunHandler:(id)arg2 {
+    BOOL replace_nc = [settings objectForKey:@"replace_nc"] ? [[settings objectForKey:@"replace_nc"] boolValue] : NO;
+    if(replace_nc) {
+        [AnySpotController togglePresentation];
+    } else {
+        %orig;
+    }
+}
 
-	HBLogDebug(@"AnySpot9: _isShowingSearch = %d", [(SBSearchGesture *)[%c(SBSearchGesture) sharedInstance] _isShowingSearch]);
-	HBLogDebug(@"AnySpot9: SBSearchGesture.activeted = %d", ((SBSearchGesture *)[%c(SBSearchGesture) sharedInstance]).activated);
-	
+/*
+ * Hooking this message so get rid of the NC grabber if they just want Spotlight
+ * @return whether or not there will be a grabber
+ */
+-(BOOL)isGrabberEnabled {
+    %log;
+    BOOL replace_nc = [settings objectForKey:@"replace_nc"] ? [[settings objectForKey:@"replace_nc"] boolValue] : NO;
+    if(replace_nc) {
+        return NO;
+    }
+    return %orig;
+}
+%end
+
+@implementation AnySpotController
+/* 
+ * Allows developers to call on AnySpot and present it or dismiss it
+ * @return NO if dismissing, yes if presenting
+ */
++(BOOL)togglePresentation {
+    HBLogDebug(@"AnySpot9: _isShowingSearch = %d", [(SBSearchGesture *)[%c(SBSearchGesture) sharedInstance] _isShowingSearch]);
+    HBLogDebug(@"AnySpot9: SBSearchGesture.activeted = %d", ((SBSearchGesture *)[%c(SBSearchGesture) sharedInstance]).activated);
+    
     didLaunchfrominsideapplication = NO;
     
     // First check if search is showing...
-	if([(SBSearchGesture *)[%c(SBSearchGesture) sharedInstance] _isShowingSearch]) {
+    if([(SBSearchGesture *)[%c(SBSearchGesture) sharedInstance] _isShowingSearch]) {
         HBLogInfo(@"AnySpot9: Dismissing since Spotlight is already showing.");
-		[(SBSearchViewController *)[%c(SBSearchViewController) sharedInstance] dismiss];
-	}
+        [(SBSearchViewController *)[%c(SBSearchViewController) sharedInstance] dismiss];
+        return NO;
+    }
     else {
-	 	HBLogDebug(@"AnySpot9: keyWindow = %@", (SBHomeScreenWindow *)((SpringBoard *)[%c(SpringBoard) sharedApplication]).keyWindow);
-	 	SBApplication *frontMostApplication = [(SpringBoard *)[%c(SpringBoard) sharedApplication] _accessibilityFrontMostApplication];
+        HBLogDebug(@"AnySpot9: keyWindow = %@", (SBHomeScreenWindow *)((SpringBoard *)[%c(SpringBoard) sharedApplication]).keyWindow);
+        SBApplication *frontMostApplication = [(SpringBoard *)[%c(SpringBoard) sharedApplication] _accessibilityFrontMostApplication];
         latestBundleID =[frontMostApplication bundleIdentifier];
         
-		HBLogDebug(@"AnySpot9: frontMostApplication = %@", frontMostApplication);
-		
+        HBLogDebug(@"AnySpot9: frontMostApplication = %@", frontMostApplication);
+        
         // Check if in application
-		if(frontMostApplication != nil) {
+        if(frontMostApplication != nil) {
             HBLogInfo(@"AnySpot9: Launching from inside %@", latestBundleID);
-             didLaunchfrominsideapplication = YES;
-			FBScene *appScene = [frontMostApplication mainScene];
-		    FBWindowContextHostManager *contextHost = [appScene contextHostManager];
+            didLaunchfrominsideapplication = YES;
+            FBScene *appScene = [frontMostApplication mainScene];
+            FBWindowContextHostManager *contextHost = [appScene contextHostManager];
             UIImage *snapshot = [contextHost snapshotUIImageForFrame:[[UIScreen mainScreen] applicationFrame] excludingContexts:nil opaque:NO outTransform:nil];
-            latestSnapshotView = [[UIImageView alloc] initWithImage:snapshot];
+            latestSnapshotView = [[AnySpotSnapshotView alloc] initWithImage:snapshot];
             latestSnapshotView.tag = 666;
+            superSmoothLatestSnapshotView = [[AnySpotSnapshotView alloc] initWithImage:snapshot];
+            superSmoothLatestSnapshotView.tag = 667;
             
-		    latestHostWindow = [[contextHost valueForKey:@"_hostView"] window];
+            latestHostWindow = [[contextHost valueForKey:@"_hostView"] window];
             
             UIView *outerview = ((SBSearchViewController *)[%c(SBSearchViewController) sharedInstance]).view;
             // I would love to insert the image in outerview's superview but this caused
             //  removing it more difficult.
             HBLogDebug(@"Adding UIImage to %@", outerview);
+            [outerview insertSubview:latestSnapshotView atIndex:0];
             
             BOOL extraSmooth = [settings objectForKey:@"extraSmooth"] ? [[settings objectForKey:@"extraSmooth"] boolValue] : NO;
             if(extraSmooth) {
-                HBLogDebug(@"Going for some extra smoothness");
-                [outerview.superview insertSubview:latestSnapshotView belowSubview:outerview];
-            } else {
-                [outerview insertSubview:latestSnapshotView atIndex:0];
+                HBLogDebug(@"Going for some extra smoothness to %@", outerview.superview);
+                [outerview.superview insertSubview:superSmoothLatestSnapshotView belowSubview:outerview];
             }
             
-		    latestHostWindow.windowLevel = -3.0; // put it under the homescreen which is -2.0
-		    [(SBUIController *)[%c(SBUIController) sharedInstance] restoreContentAndUnscatterIconsAnimated:NO];
-		    //[[SBWallpaperController sharedInstance] beginRequiringWithReason:@"HSCloseAppGesture"];
+            latestHostWindow.windowLevel = -3.0; // put it under the homescreen which is -2.0
+            [(SBUIController *)[%c(SBUIController) sharedInstance] restoreContentAndUnscatterIconsAnimated:NO];
+            //[[SBWallpaperController sharedInstance] beginRequiringWithReason:@"HSCloseAppGesture"];
             
-			[(SBSearchGesture *)[%c(SBSearchGesture) sharedInstance] revealAnimated:YES];
-		}
+            [(SBSearchGesture *)[%c(SBSearchGesture) sharedInstance] revealAnimated:YES];
+        }
         else {
-			//check if on the lockscreen
-			if ([(SpringBoard*)[%c(SpringBoard) sharedApplication] isLocked]) {
+            //check if on the lockscreen
+            if ([(SpringBoard*)[%c(SpringBoard) sharedApplication] isLocked]) {
                 HBLogInfo(@"AnySpot9: Screen is locked so cannot display Spotlight. Sorry!");
-			}
+            }
             else {
                 HBLogInfo(@"AnySpot9: Launching from SpringBoard.");
-				[(SpringBoard*)[%c(SpringBoard) sharedApplication] _revealSpotlight];
-			}
-		}
-	}
-    
+                [(SpringBoard*)[%c(SpringBoard) sharedApplication] _revealSpotlight];
+            }
+        }
+    }
+    return YES;
+}
+@end
+
+
+@implementation AnySpotActivator
+- (void)activator:(id)activator receiveEvent:(LAEvent *)event {
+	HBLogDebug(@"AnySpot9: event = %@", event);
+    [AnySpotController togglePresentation];
 	[event setHandled:YES];
 }
 
@@ -298,6 +357,7 @@ static void getSettings() {
 
 %ctor {
 	dlopen("/usr/lib/libactivator.dylib", RTLD_LAZY);
+    //TODO: put this in the init function
     static AnySpotActivator *listener = [[AnySpotActivator alloc] init];
     [(LAActivator *)[%c(LAActivator) sharedInstance] registerListener:listener forName:@"org.thebigboss.anyspot9"];
     CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)getSettings, CFSTR("org.thebigboss.anyspot9/settingschanged"), NULL, CFNotificationSuspensionBehaviorCoalesce);
